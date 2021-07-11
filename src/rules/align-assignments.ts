@@ -142,7 +142,7 @@ export default createRule({
         if (node.loc.start.line - lastAssignmentNode.loc.start.line > maxRows) {
           return true
         }
-        if (Math.abs(findAssigment(lastAssignmentNode)! - findAssigment(node)!) > maxColumns) {
+        if (Math.abs(findAssignment(lastAssignmentNode)! - findAssignment(node)!) > maxColumns) {
           return true
         }
       }
@@ -194,7 +194,7 @@ export default createRule({
       return firstToken.loc.start.line !== assignmentToken.loc.start.line
     }
 
-    function findAssigment(node: CheckedNodes) {
+    function findAssignment(node: CheckedNodes) {
       const prefix   = getPrefix(node)
       const source   = sourceCode.getText(node)
       const match    = source.substr(prefix).match(spaceMatcher)
@@ -230,7 +230,7 @@ export default createRule({
     function getMaxPos(nodes: CheckedNodes[]) {
       const maxPos = nodes
         .filter(assignmentOnFirstLine)
-        .map(findAssigment)
+        .map(findAssignment)
         .reduce((last, current) => Math.max(last!, current!), 0)
       return maxPos
     }

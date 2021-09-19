@@ -13,5 +13,8 @@
     "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"]
+  "plugins": ["@0x706b/align-assignments", "@typescript-eslint"],
+  "rules": {
+    "@0x706b/align-assignments/align-assignments": "error"
+  }
 }

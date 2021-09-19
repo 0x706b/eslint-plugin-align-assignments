@@ -7,7 +7,7 @@ const createRule = ESLintUtils.RuleCreator(
   (name) => `https://github.com/0x706b/eslint-plugin-align-assignments/blob/v${version}/docs/rules/${name}.md`
 )
 
-const spaceMatcher = /(\s*)((?!\['|"|`)(?!=>)(?:\+|-|\*|\/|%|&|\^|\||<<|>>|\*\*|>>>)?=)(?!'|"|`\])/
+const spaceMatcher = /(\s*)((?!\['|"|`)(?!=>)(?:\+|-|\*|\/|%|&|&&|\^|\||\|\||<<|>>|\*\*|>>>)?=)(?!'|"|`\])/
 
 type AssignmentExpressionStatement = TSESTree.ExpressionStatement & { expression: TSESTree.AssignmentExpression }
 type ExportNamedVariableDeclaration = TSESTree.ExportNamedDeclaration & { declaration: TSESTree.VariableDeclaration }
@@ -165,7 +165,7 @@ export default createRule({
               const tokens          = sourceCode.getTokens(node)
               const firstToken      = tokens[0]
               const assignmentToken = tokens.find((token) =>
-                ['=', '+=', '-=', '*=', '/=', '%=', '&=', '^=', '|=', '>>=', '<<=', '**=', '>>>='].includes(token.value)
+                ['=', '+=', '-=', '*=', '/=', '%=', '&=', '^=', '|=', '>>=', '<<=', '**=', '>>>=', '||=', '&&='].includes(token.value)
               )
               const line          = sourceCode.getText(node)
               const lineIsAligned = line.charAt(maxPos) === '='

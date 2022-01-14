@@ -16,7 +16,7 @@ type CheckedNodes =
   | TSESTree.VariableDeclaration
   | AssignmentExpressionStatement
   | ExportNamedVariableDeclaration
-  | TSESTree.ClassProperty
+  | TSESTree.PropertyDefinition
   | TSESTree.AssignmentExpression
 
 export default createRule({
@@ -25,7 +25,6 @@ export default createRule({
     type: 'layout',
     docs: {
       description: 'Enforce assignment alignment',
-      category: 'Stylistic Issues',
       recommended: false
     },
     fixable: 'code',
@@ -84,11 +83,12 @@ export default createRule({
 
         addNode(node as ExportNamedVariableDeclaration, node.declaration)
       },
-      ClassProperty(node) {
-        if (node.value == null) {
-          return
-        }
-        addNode(node, node)
+      ClassDeclaration(node) {
+        node.body.body.forEach((el) => {
+          if (el.type === AST_NODE_TYPES.PropertyDefinition && el.value != null) {
+            addNode(el, el)
+          }
+        })
       },
       'Program:exit': checkAll
     }
@@ -165,7 +165,23 @@ export default createRule({
               const tokens          = sourceCode.getTokens(node)
               const firstToken      = tokens[0]
               const assignmentToken = tokens.find((token) =>
-                ['=', '+=', '-=', '*=', '/=', '%=', '&=', '^=', '|=', '>>=', '<<=', '**=', '>>>=', '||=', '&&='].includes(token.value)
+                [
+                  '=',
+                  '+=',
+                  '-=',
+                  '*=',
+                  '/=',
+                  '%=',
+                  '&=',
+                  '^=',
+                  '|=',
+                  '>>=',
+                  '<<=',
+                  '**=',
+                  '>>>=',
+                  '||=',
+                  '&&='
+                ].includes(token.value)
               )
               const line          = sourceCode.getText(node)
               const lineIsAligned = line.charAt(maxPos) === '='
